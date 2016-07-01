@@ -322,6 +322,8 @@ public class XStream {
     private SecurityMapper securityMapper;
     private AnnotationConfiguration annotationConfiguration;
 
+    private boolean is141Compatible = true;
+
     public static final int NO_REFERENCES = 1001;
     public static final int ID_REFERENCES = 1002;
     public static final int XPATH_RELATIVE_REFERENCES = 1003;
@@ -599,7 +601,7 @@ public class XStream {
         }
         mapper = new LocalConversionMapper(mapper);
         mapper = new ImmutableTypesMapper(mapper);
-        if (JVM.is18()) {
+        if (JVM.is18() && !is141Compatible) {
             mapper = buildMapperDynamically("com.thoughtworks.xstream.mapper.LambdaMapper", new Class[]{Mapper.class},
                 new Object[]{mapper});
         }
@@ -719,14 +721,15 @@ public class XStream {
         alias("tree-map", TreeMap.class);
         alias("tree-set", TreeSet.class);
         alias("hashtable", Hashtable.class);
-        
-        alias("empty-list", Collections.EMPTY_LIST.getClass());
-        alias("empty-map", Collections.EMPTY_MAP.getClass());
-        alias("empty-set", Collections.EMPTY_SET.getClass());
-        alias("singleton-list", Collections.singletonList(this).getClass());
-        alias("singleton-map", Collections.singletonMap(this, null).getClass());
-        alias("singleton-set", Collections.singleton(this).getClass());
 
+        if (!is141Compatible) {
+            alias("empty-list", Collections.EMPTY_LIST.getClass());
+            alias("empty-map", Collections.EMPTY_MAP.getClass());
+            alias("empty-set", Collections.EMPTY_SET.getClass());
+            alias("singleton-list", Collections.singletonList(this).getClass());
+            alias("singleton-map", Collections.singletonMap(this, null).getClass());
+            alias("singleton-set", Collections.singleton(this).getClass());
+        }
         if (JVM.isAWTAvailable()) {
             // Instantiating these two classes starts the AWT system, which is undesirable.
             // Calling loadClass ensures a reference to the class is found but they are not
@@ -757,13 +760,15 @@ public class XStream {
 
         if (JVM.is15()) {
             aliasDynamically("duration", "javax.xml.datatype.Duration");
-            alias("concurrent-hash-map", JVM.loadClassForName("java.util.concurrent.ConcurrentHashMap"));
+            if (!is141Compatible) {
+                alias("concurrent-hash-map", JVM.loadClassForName("java.util.concurrent.ConcurrentHashMap"));
+            }
             alias("enum-set", JVM.loadClassForName("java.util.EnumSet"));
             alias("enum-map", JVM.loadClassForName("java.util.EnumMap"));
             alias("string-builder", JVM.loadClassForName("java.lang.StringBuilder"));
             alias("uuid", JVM.loadClassForName("java.util.UUID"));
         }
-        if (JVM.loadClassForName("java.lang.invoke.SerializedLambda") != null) {
+        if (JVM.loadClassForName("java.lang.invoke.SerializedLambda") != null && !is141Compatible) {
             aliasDynamically("serialized-lambda", "java.lang.invoke.SerializedLambda");
         }
     }
@@ -819,8 +824,10 @@ public class XStream {
         registerConverter(new MapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeMapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeSetConverter(mapper), PRIORITY_NORMAL);
-        registerConverter(new SingletonCollectionConverter(mapper), PRIORITY_NORMAL);
-        registerConverter(new SingletonMapConverter(mapper), PRIORITY_NORMAL);
+        if (!is141Compatible) {
+            registerConverter(new SingletonCollectionConverter(mapper), PRIORITY_NORMAL);
+            registerConverter(new SingletonMapConverter(mapper), PRIORITY_NORMAL);
+        }
         registerConverter(new PropertiesConverter(), PRIORITY_NORMAL);
         registerConverter((Converter)new EncodedByteArrayConverter(), PRIORITY_NORMAL);
 
@@ -893,7 +900,7 @@ public class XStream {
                 "com.thoughtworks.xstream.converters.basic.UUIDConverter", PRIORITY_NORMAL,
                 null, null);
         }
-        if (JVM.is18()) {
+        if (JVM.is18() && !is141Compatible) {
             registerConverterDynamically("com.thoughtworks.xstream.converters.reflection.LambdaConverter",
                 PRIORITY_NORMAL, new Class[]{Mapper.class, ReflectionProvider.class, ClassLoaderReference.class},
                 new Object[]{mapper, reflectionProvider, classLoaderReference});
@@ -956,10 +963,11 @@ public class XStream {
         addImmutableType(File.class);
         addImmutableType(Class.class);
 
-        addImmutableType(Collections.EMPTY_LIST.getClass());
-        addImmutableType(Collections.EMPTY_SET.getClass());
-        addImmutableType(Collections.EMPTY_MAP.getClass());
-
+        if (!is141Compatible) {
+            addImmutableType(Collections.EMPTY_LIST.getClass());
+            addImmutableType(Collections.EMPTY_SET.getClass());
+            addImmutableType(Collections.EMPTY_MAP.getClass());
+        }
         if (JVM.isAWTAvailable()) {
             addImmutableTypeDynamically("java.awt.font.TextAttribute");
         }
