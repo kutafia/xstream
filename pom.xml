@@ -17,7 +17,7 @@
     <version>3</version><!-- 4 required Java 5 -->
     <relativePath />
   </parent>
-  <groupId>com.thoughtworks.xstream</groupId>
+  <groupId>org.jetbrains.teamcity.xstream</groupId>
   <artifactId>xstream-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.4.8</version>
@@ -180,12 +180,12 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.8</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.8</version>
         <classifier>tests</classifier>
@@ -193,31 +193,31 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.8</version>
         <classifier>javadoc</classifier>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-hibernate</artifactId>
         <version>1.4.8</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-hibernate</artifactId>
         <version>1.4.8</version>
         <classifier>javadoc</classifier>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-benchmark</artifactId>
         <version>1.4.8</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-benchmark</artifactId>
         <version>1.4.8</version>
         <classifier>javadoc</classifier>
