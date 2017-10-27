@@ -664,10 +664,9 @@ public class XStream {
         mapper = new DefaultImplementationsMapper(mapper);
         mapper = new AttributeMapper(mapper, converterLookup, reflectionProvider);
         if (JVM.is15()) {
-            //noinspection RedundantCast
             mapper = buildMapperDynamically(
                 "com.thoughtworks.xstream.mapper.EnumMapper", new Class[]{Mapper.class, Boolean.class},
-                new Object[]{mapper, (Boolean)is141Compatible});
+                new Object[]{mapper, Boolean.valueOf(this.is141Compatible)});
         }
         mapper = new LocalConversionMapper(mapper);
         mapper = new ImmutableTypesMapper(mapper);
