@@ -1542,7 +1542,7 @@ public class XStream {
         try {
             if (insecureWarning) {
                 insecureWarning = false;
-                System.err.println("Security framework of XStream not initialized, XStream is probably vulnerable.");
+                if (!is141Compatible) System.err.println("Security framework of XStream not initialized, XStream is probably vulnerable.");
             }
             return marshallingStrategy.unmarshal(
                 root, reader, dataHolder, converterLookup, mapper);
