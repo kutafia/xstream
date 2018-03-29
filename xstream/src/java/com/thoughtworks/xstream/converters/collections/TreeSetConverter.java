@@ -56,6 +56,9 @@ public class TreeSetConverter extends CollectionConverter {
                 backingMap = (Map)sortedMapField.get(set);
             } catch (final IllegalAccessException e) {
                 // give up;
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
             }
             if (backingMap != null) {
                 Object[] values = backingMap.values().toArray();
@@ -70,6 +73,9 @@ public class TreeSetConverter extends CollectionConverter {
                     value = valueField.get(null);
                 } catch (final IllegalAccessException e) {
                     // give up;
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                 }
             }
         }
@@ -99,6 +105,10 @@ public class TreeSetConverter extends CollectionConverter {
             try {
                 backingMap = sortedMapField.get(possibleResult);
             } catch (IllegalAccessException e) {
+                throw new ObjectAccessException("Cannot get backing map of TreeSet", e);
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                 throw new ObjectAccessException("Cannot get backing map of TreeSet", e);
             }
             if (backingMap instanceof TreeMap) {
