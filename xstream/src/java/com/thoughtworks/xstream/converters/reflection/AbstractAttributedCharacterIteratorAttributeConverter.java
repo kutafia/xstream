@@ -82,6 +82,10 @@ public class AbstractAttributedCharacterIteratorAttributeConverter extends
                 ex = e;
             } catch (InvocationTargetException e) {
                 ex = e;
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                ex = e;
             }
         }
         String s = attribute.toString();
@@ -140,6 +144,10 @@ public class AbstractAttributedCharacterIteratorAttributeConverter extends
                 } catch (ObjectAccessException e) {
                     attributeMap.clear();
                 } catch (NoClassDefFoundError e) {
+                    attributeMap.clear();
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                     attributeMap.clear();
                 }
             }

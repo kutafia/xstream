@@ -1259,6 +1259,9 @@ public class XStream {
                 } catch (SecurityException e) {
                 } catch (IllegalAccessException e) {
                 } catch (InvocationTargetException e) {
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                 }
             }
         }
